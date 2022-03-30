@@ -7,6 +7,7 @@ import { helloWorld } from "./helloworld";
 const app = express();
 const serverStartDate = new Date();
 let serverHitCount = 0;
+let history = {routes: [""]};
 
 app.get("/", (req, res) => {
   res.send(
@@ -15,6 +16,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/creation-time", (req, res) => {
+  history.routes.push("/creation-time");
   res.json({
     message: `The server was started at ${serverStartDate.toTimeString()}`,
     utc: serverStartDate.toUTCString(),
@@ -24,7 +26,7 @@ app.get("/creation-time", (req, res) => {
 
 app.get("/current-time", (req, res) => {
   const dateOfRequestHandling = new Date();
-
+  history.routes.push("/current-time");
   res.json({
     message: `The current date is ${dateOfRequestHandling.toTimeString()}`,
     utc: dateOfRequestHandling.toUTCString(),
@@ -33,6 +35,7 @@ app.get("/current-time", (req, res) => {
 });
 
 app.get("/hits", (req, res) => {
+  history.routes.push("/hits");
   serverHitCount += 1;
   res.json({
     note: "We've registered your hit!",
@@ -42,6 +45,7 @@ app.get("/hits", (req, res) => {
 });
 
 app.get("/hits-stealth", (req, res) => {
+  history.routes.push("/hits-stealth");
   res.json({
     note: "Oooh, you ninja. We didn't count that hit.",
     currentTotal: serverHitCount,
@@ -50,6 +54,7 @@ app.get("/hits-stealth", (req, res) => {
 });
 
 app.get("/ponies", (req, res) => {
+  history.routes.push("/ponies");
   res.json({
     message: "Loaded dummy JSON data:",
     data: ponyData,
@@ -58,6 +63,7 @@ app.get("/ponies", (req, res) => {
 });
 
 app.get("/ponies/random", (req, res) => {
+  history.routes.push("/ponies/random");
   const randomPony = pickRandom(ponyData.members);
   res.json({
     message: "Loaded dummy JSON data:",
@@ -67,6 +73,7 @@ app.get("/ponies/random", (req, res) => {
 });
 
 app.get("/season-one", (req, res) => {
+  history.routes.push("/season-one");
   res.json({
     countedAsHit: false,
     data: seasonOneEpisodes,
@@ -74,6 +81,7 @@ app.get("/season-one", (req, res) => {
 });
 
 app.get("/season-one/random", (req, res) => {
+  history.routes.push("/season-one/random");
   const randomEpisode = pickRandom(seasonOneEpisodes);
   res.json({
     countedAsHit: false,
@@ -82,9 +90,18 @@ app.get("/season-one/random", (req, res) => {
 });
 
 app.get("/hello-world", (req, res) => {
+  history.routes.push("/hello-world");
   res.json({
     countedAsHit: false,
     data: helloWorld,
+  });
+});
+
+app.get("/history", (req, res) => {
+  history.routes.push("/history");
+  res.json({
+    countedAsHit: false,
+    data: history,
   });
 });
 
