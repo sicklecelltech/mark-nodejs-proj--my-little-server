@@ -2,6 +2,7 @@ import express from "express";
 import ponyData from "../data/ponies.json";
 import { seasonOneEpisodes } from "./episodes";
 import { pickRandom } from "./random";
+import { helloWorld } from "./helloworld";
 
 const app = express();
 const serverStartDate = new Date();
@@ -56,6 +57,15 @@ app.get("/ponies", (req, res) => {
   });
 });
 
+app.get("/ponies/random", (req, res) => {
+  const randomPony = pickRandom(ponyData.members);
+  res.json({
+    message: "Loaded dummy JSON data:",
+    data: randomPony,
+    countedAsHit: false,
+  });
+});
+
 app.get("/season-one", (req, res) => {
   res.json({
     countedAsHit: false,
@@ -71,8 +81,15 @@ app.get("/season-one/random", (req, res) => {
   });
 });
 
+app.get("/hello-world", (req, res) => {
+  res.json({
+    countedAsHit: false,
+    data: helloWorld,
+  });
+});
+
 // using 4000 by convention, but could be changed
-const PORT_NUMBER = 4000;
+const PORT_NUMBER = 5050;
 
 app.listen(PORT_NUMBER, () => {
   console.log(
